@@ -11,8 +11,9 @@ WORKDIR /tmp/src
 RUN set -e -x && \
     build_deps="build-essential ca-certificates curl dirmngr gnupg libidn2-0-dev libssl-dev" && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
-      $build_deps && \
-    curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
+      $build_deps 
+
+RUN    curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
     echo "${SHA256_OPENSSL} ./openssl.tar.gz" | sha256sum -c - && \
     curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
@@ -28,9 +29,11 @@ RUN set -e -x && \
       no-weak-ssl-ciphers \
       no-ssl3 \
       no-shared \
-      enable-ec_nistp_64_gcc_128 \
+ #     enable-ec_nistp_64_gcc_128 \
       -DOPENSSL_NO_HEARTBEATS \
-      -fstack-protector-strong && \
+      -fstack-protector-strong
+
+RUN cd $VERSION_OPENSSL && \
     make depend && \
     make && \
     make install_sw && \
