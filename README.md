@@ -1,20 +1,16 @@
+# @averissimo fork
+
+I'm running this on raspberry pi and for it to build in this platform it requires that a openssl compile flag is removed.
+
+My preference would be to use an exising docker image, but I could only use this one _(modified)_.
+
+This is built automatically and pushed to docker hub
+
 # Unbound DNS Server Docker Image
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`1.10.0`, `latest` (*1.10.0/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.10.0)
-- [`1.9.6`, (*1.9.6/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.6)
-- [`1.9.5`, (*1.9.5/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.5)
-- [`1.9.4`, (*1.9.4/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.4)
-- [`1.9.3`, (*1.9.3/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.3)
-- [`1.9.2`, (*1.9.2/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.2)
-- [`1.9.1`, (*1.9.1/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.1)
-- [`1.9.0`, (*1.9.0/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.9.0)
-- [`1.8.3`, (*1.8.3/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.8.3)
-- [`1.8.2`, (*1.8.2/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.8.2)
-- [`1.8.1`, (*1.8.1/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.8.1)
-- [`1.7.3`, (*1.7.3/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.7.3)
-- [`1.6.8`, (*1.6.8/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.6.8)
+- [`1.10.0`, `latest` (*1.10.0/Dockerfile*)](tree/master/1.10.0)
 
 ## What is Unbound?
 

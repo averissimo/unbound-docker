@@ -1,5 +1,5 @@
 FROM debian:buster as openssl
-LABEL maintainer="Matthew Vance"
+LABEL maintainer="André Veríssimo"
 
 ENV VERSION_OPENSSL=openssl-1.1.1f \
     SHA256_OPENSSL=186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35 \
@@ -11,7 +11,7 @@ WORKDIR /tmp/src
 RUN set -e -x && \
     build_deps="build-essential ca-certificates curl dirmngr gnupg libidn2-0-dev libssl-dev" && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
-      $build_deps 
+      $build_deps
 
 RUN    curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
     echo "${SHA256_OPENSSL} ./openssl.tar.gz" | sha256sum -c - && \
@@ -45,12 +45,11 @@ RUN cd $VERSION_OPENSSL && \
         /var/lib/apt/lists/*
 
 FROM debian:buster as unbound
-LABEL maintainer="Matthew Vance"
+LABEL maintainer="André Veríssimo"
 
 ENV NAME=unbound \
-    UNBOUND_VERSION=1.10.0 \
-    UNBOUND_SHA256=152f486578242fe5c36e89995d0440b78d64c05123990aae16246b7f776ce955 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.10.0.tar.gz
+    UNBOUND_VERSION=latest \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz
 
 WORKDIR /tmp/src
 
@@ -66,10 +65,9 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
       libevent-2.1-6 \
       libexpat1 && \
     curl --cacert /etc/ssl/certs/ca-certificates.crt -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
-    echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
-    cd unbound-1.10.0 && \
+    cd unbound-$UNBOUND_VERSION && \
     groupadd _unbound && \
     useradd -g _unbound -s /etc -d /dev/null _unbound && \
     ./configure \
@@ -94,7 +92,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
 
 
 FROM debian:buster
-LABEL maintainer="Matthew Vance"
+LABEL maintainer="André Veríssimo"
 
 ENV NAME=unbound \
     VERSION=1.4 \
@@ -141,6 +139,6 @@ ENV PATH /opt/unbound/sbin:"$PATH"
 EXPOSE 53/tcp
 EXPOSE 53/udp
 
-HEALTHCHECK --interval=5s --timeout=3s --start-period=5s CMD drill @127.0.0.1 cloudflare.com || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s CMD drill @127.0.0.1 reddit.com || exit 1
 
 CMD ["/unbound.sh"]
