@@ -22,13 +22,16 @@ jobs:
         version: latest
     - name: Available platforms
       run: echo ${{ steps.buildx.outputs.platforms }}
+    - name: Docker login
+      run: |
+        echo "${{ secrets.HUB_PASS }}" | docker login --username "${{ secrets.HUB_USER }}" --password-stdin
     - name: Build
       run: |
         ls
         cd 1.10.0
 
-        docker buildx build . --platform linux/arm/v7 --load -t betashil/unbound
-    - name: Push
-      run: |
-        docker login --username "${{ secrets.HUB_USER }}" --password "${{ secrets.HUB_PASS }}"
-        docker push betashil/unbound
+        docker buildx build \
+          --platform linux/arm/v7 \
+          --output "type=image,push=true" \
+          --tag betashil/unbound:latest \
+          --file Dockerfile .
