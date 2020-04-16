@@ -10,22 +10,23 @@ jobs:
     steps:
     - name: Checkout current repo
       uses: actions/checkout@v2
-      with:
-        path: repo
     - name: verbose
       run: |
         docker -v
         export DOCKER_CLI_EXPERIMENTAL=enabled
         docker buildx create --help
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
     - name: Build
       run: |
         ls
-        cd repo/1.10.0
-        #docker build --pull . -f Dockerfile -t betashil/unbound
+        cd 1.10.0
 
-        export DOCKER_CLI_EXPERIMENTAL=enabled
-        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-        docker buildx create --use --driver docker-container
         docker buildx build . --platform linux/arm/v7 --load -t betashil/unbound
     - name: Push
       run: |
