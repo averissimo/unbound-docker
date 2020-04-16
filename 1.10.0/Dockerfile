@@ -13,9 +13,9 @@ RUN set -e -x && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps 
 
-RUN    curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
+RUN    curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
     echo "${SHA256_OPENSSL} ./openssl.tar.gz" | sha256sum -c - && \
-    curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
+    curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
     export GNUPGHOME && \
     ( gpg --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$OPGP_OPENSSL" \
@@ -65,7 +65,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
       ldnsutils \
       libevent-2.1-6 \
       libexpat1 && \
-    curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
+    curl --cacert /etc/ssl/certs/ca-certificates.crt -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
     echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
