@@ -21,7 +21,7 @@ Original documentation for image below
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`1.10.0`, `latest` (*1.10.0/Dockerfile*)](tree/master/1.10.0)
+- [`latest`)](tree/master/)
 
 ## What is Unbound?
 
