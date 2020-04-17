@@ -21,7 +21,7 @@ Original documentation for image below
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`latest`)](tree/master/)
+- [`latest`)](https://github.com/averissimo/unbound-docker/tree/master/)
 
 ## What is Unbound?
 
@@ -36,7 +36,7 @@ Run this container with the following command:
 
 ```console
 docker run --name my-unbound -d -p 53:53/udp -p 53:53/tcp \
---restart=always mvance/unbound:latest
+--restart=always betashil/unbound:latest
 ```
 
 *For a DNS server with lots of short-lived connections, you may wish to consider
@@ -82,7 +82,7 @@ when starting the container:
 ```console
 docker run --name my-unbound -d -p 53:53/udp -p 53:53/tcp -v \
 $(pwd)/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro \
---restart=always mvance/unbound:latest
+--restart=always betashil/unbound:latest
 ```
 ### Use a customized Unbound configuration
 
@@ -95,7 +95,7 @@ docker run --name=my-unbound \
 --publish=53:53/udp \
 --restart=unless-stopped \
 --detach=true \
-mvance/unbound:latest
+betashil/unbound:latest
 ```
 
 This will expose all files in `/my-directory/unbound/` to the container. As an alternate way to serve custom DNS records for any local zones, either place them directly in your `unbound.conf`, or place the local zones in a separate file and use Unbound's include directive within your `unbound.conf`:
