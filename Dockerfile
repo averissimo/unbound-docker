@@ -127,9 +127,9 @@ RUN set -x && \
         /var/lib/apt/lists/*
 
 COPY a-records.conf /opt/unbound/etc/unbound/
-COPY unbound.sh /
+COPY entry.sh /
 
-RUN chmod +x /unbound.sh
+RUN chmod +x /entry.sh
 
 WORKDIR /opt/unbound/
 
