@@ -13,7 +13,7 @@ RUN set -e -x && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps
 
-RUN    curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
+RUN curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
     echo "${SHA256_OPENSSL} ./openssl.tar.gz" | sha256sum -c - && \
     curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
@@ -90,7 +90,6 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-
 FROM debian:buster
 LABEL maintainer="André Veríssimo"
 
@@ -103,8 +102,8 @@ LABEL summary="${SUMMARY}" \
       description="${DESCRIPTION}" \
       io.k8s.description="${DESCRIPTION}" \
       io.k8s.display-name="Unbound ${UNBOUND_VERSION}" \
-      name="mvance/${NAME}" \
-      maintainer="Matthew Vance"
+      name="betashil/${NAME}" \
+      maintainer="André Veríssimo"
 
 WORKDIR /tmp/src
 

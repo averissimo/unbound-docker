@@ -6,6 +6,8 @@ My preference would be to use an exising docker image, but I could only use this
 
 This is built automatically and pushed to docker hub
 
+root.hints is downloaded by `wget -O root.hints https://www.internic.net/domain/named.root`
+
 # Unbound DNS Server Docker Image
 
 ## Supported tags and respective `Dockerfile` links
