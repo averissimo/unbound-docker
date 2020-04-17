@@ -1,12 +1,21 @@
 # @averissimo fork
 
-I'm running this on raspberry pi and for it to build in this platform it requires that a openssl compile flag is removed.
+This is a great docker image built by and maintained by [@MatthewVance](https://github.com/MatthewVance/unbound-docker).
 
-My preference would be to use an exising docker image, but I could only use this one _(modified)_.
+I needed to make some changes to have it working in raspberry pi out of the box and only require the latest version.
 
-This is built automatically and pushed to docker hub
+Changes in the fork:
 
-root.hints is downloaded by `wget -O root.hints https://www.internic.net/domain/named.root`
+* Removed openssl compile flag that gives an error on *arm*
+* Using latest available download of unbound, instead of fixed versions.
+* Builds automatically every week and publishes to docker hub
+* includes a docker-compose example file
+    * `root.hints` file is made available
+    * `unbound.conf` file is also available *(in practice, that's almost the same as the automatically genereated one)*
+
+*Small note to future self:* root.hints is downloaded by `wget -O root.hints https://www.internic.net/domain/named.root`
+
+Original documentation for image below
 
 # Unbound DNS Server Docker Image
 
