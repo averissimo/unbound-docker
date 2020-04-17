@@ -141,4 +141,4 @@ EXPOSE 53/udp
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s CMD drill @127.0.0.1 reddit.com || exit 1
 
-CMD ["/unbound.sh"]
+CMD ["/entry.sh"]
