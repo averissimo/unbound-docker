@@ -1,5 +1,7 @@
 on:
   push:
+    paths-ignore:
+      - README.md
   schedule:
     - cron: '12 7 * * 1/7'
 
