@@ -67,7 +67,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
     curl --cacert /etc/ssl/certs/ca-certificates.crt -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
-    cd unbound-$UNBOUND_VERSION && \
+    cd unbound-* && \
     groupadd _unbound && \
     useradd -g _unbound -s /etc -d /dev/null _unbound && \
     ./configure \
