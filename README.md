@@ -1,6 +1,6 @@
 # @averissimo fork
 
-This is a great docker image built by and maintained by [@MatthewVance](https://github.com/MatthewVance/unbound-docker).
+This is a great docker image maintained by [@MatthewVance](https://github.com/MatthewVance/unbound-docker).
 
 I needed to make some changes to have it working in raspberry pi out of the box and only require the latest version.
 
