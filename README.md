@@ -9,9 +9,6 @@ Changes in the fork:
 * Removed openssl compile flag that gives an error on *arm*
 * Using latest available download of unbound, instead of fixed versions.
 * Builds automatically every week and publishes to docker hub
-* includes a docker-compose example file
-    * `root.hints` file is made available
-    * `unbound.conf` file is also available *(in practice, that's almost the same as the automatically genereated one)*
 
 *Small note to future self:* root.hints is downloaded by `wget -O root.hints https://www.internic.net/domain/named.root`
 
