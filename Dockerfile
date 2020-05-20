@@ -1,8 +1,8 @@
 FROM debian:buster as openssl
 LABEL maintainer="André Veríssimo"
 
-ENV VERSION_OPENSSL=openssl-1.1.1f \
-    SHA256_OPENSSL=186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35 \
+ENV VERSION_OPENSSL=openssl-1.1.1g \
+    SHA256_OPENSSL=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
     OPGP_OPENSSL=8657ABB260F056B1E5190839D9C4D26D0E604491
 
@@ -12,7 +12,6 @@ RUN set -e -x && \
     build_deps="build-essential ca-certificates curl dirmngr gnupg libidn2-0-dev libssl-dev" && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps
-
 RUN curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz -o openssl.tar.gz && \
     echo "${SHA256_OPENSSL} ./openssl.tar.gz" | sha256sum -c - && \
     curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
@@ -29,11 +28,9 @@ RUN curl --cacert /etc/ssl/certs/ca-certificates.crt -L $SOURCE_OPENSSL$VERSION_
       no-weak-ssl-ciphers \
       no-ssl3 \
       no-shared \
- #     enable-ec_nistp_64_gcc_128 \
+      # enable-ec_nistp_64_gcc_128 \
       -DOPENSSL_NO_HEARTBEATS \
-      -fstack-protector-strong
-
-RUN cd $VERSION_OPENSSL && \
+      -fstack-protector-strong && \
     make depend && \
     make && \
     make install_sw && \
@@ -127,6 +124,7 @@ RUN set -x && \
         /var/lib/apt/lists/*
 
 COPY a-records.conf /opt/unbound/etc/unbound/
+COPY forward-records.conf /opt/unbound/etc/unbound/
 COPY entry.sh /
 
 RUN chmod +x /entry.sh
