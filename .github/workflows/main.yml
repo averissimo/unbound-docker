@@ -2,9 +2,6 @@ on:
   push:
     paths-ignore:
       - README.md
-      - root.hints
-      - unbound.conf
-      - docker-compose.yml
   schedule:
     - cron: '12 7 * * 1/7'
 
