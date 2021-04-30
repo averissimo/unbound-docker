@@ -1,0 +1,46 @@
+on:
+  push:
+    paths-ignore:
+      - README.md
+      - root.hints
+      - unbound.conf
+      - docker-compose.yml
+  schedule:
+    - cron: '12 7 * * 1/7'
+
+jobs:
+  build_docker:
+    runs-on: ubuntu-latest
+    name: Build/Push Docker
+    steps:
+    - name: Checkout current repo
+      uses: actions/checkout@v2
+    - name: verbose
+      run: |
+        docker -v
+        export DOCKER_CLI_EXPERIMENTAL=enabled
+        docker buildx create --help
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+    - name: Docker login
+      run: |
+        echo "${{ secrets.HUB_PASS }}" | docker login --username "${{ secrets.HUB_USER }}" --password-stdin
+    - name: Build
+      run: |
+        ls
+        git remote add mvance https://github.com/MatthewVance/unbound-docker
+        git pull --rebase mvance master
+        bash av_custom.bash
+        cd custom_av
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        docker buildx create --use --driver docker-container
+        docker buildx build \
+          --platform  linux/amd64,linux/arm/v7,linux/arm/v6 \
+          --output "type=image,push=true" \
+          --tag betashil/unbound:latest \
+          --file Dockerfile .
