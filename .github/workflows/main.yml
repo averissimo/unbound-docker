@@ -31,10 +31,11 @@ jobs:
       run: |
         git config --global user.email "afsverissimo@gmail.com"
         git config --global user.name "André Veríssimo"
-    - name: Pull changes from
+    - name: Pull changes from MatthewVance/unbound-docker
       run: |
         git remote add mvance https://github.com/MatthewVance/unbound-docker
-        git pull --ff mvance master
+        git fetch mvance master
+        git merge mvance/master --ff
         git push origin master
     - name: ls
       run: |
