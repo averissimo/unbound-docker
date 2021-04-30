@@ -27,11 +27,21 @@ jobs:
     - name: Docker login
       run: |
         echo "${{ secrets.HUB_PASS }}" | docker login --username "${{ secrets.HUB_USER }}" --password-stdin
-    - name: Build
+    - name: Set credentials
+      run: |
+        git config --global user.email "afsverissimo@gmail.com"
+        git config --global user.name "André Veríssimo"
+    - name: Rebase with MatthewVance
+      run: |
+        git remote add mvance https://github.com/MatthewVance/unbound-docker
+        git co mvance/master -- README.md
+        git pull --merge mvance master
+        git push origin master
+    - name: ls
       run: |
         ls
-        git remote add mvance https://github.com/MatthewVance/unbound-docker
-        git pull --rebase mvance master
+    - name: Build
+      run: |
         bash av_custom.bash
         cd custom_av
         docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
