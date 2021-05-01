@@ -2,7 +2,11 @@
 
 latest=$(ls | grep -E "^[1-9]" | sort --version-sort | tail -n 1)
 
+echo "latest version is: $latest"
+
 cp -r $latest custom-av
+
+ls
 
 oldpwd=$(pwd)
 
