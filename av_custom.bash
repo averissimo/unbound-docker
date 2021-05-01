@@ -6,8 +6,6 @@ echo "latest version is: $latest"
 
 cp -r $latest custom-av
 
-ls
-
 oldpwd=$(pwd)
 
 cd custom-av
