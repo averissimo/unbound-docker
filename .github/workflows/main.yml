@@ -52,6 +52,9 @@ jobs:
         git config --local user.name "GitHub Action"
     - name: Pull changes from MatthewVance/unbound-docker
       run: |
+        echo $(pwd)
+        ls -ln
+        git status
         git remote add mvance https://github.com/MatthewVance/unbound-docker
         git fetch --all
         git merge mvance/master
