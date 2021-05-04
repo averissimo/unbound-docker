@@ -65,13 +65,10 @@ jobs:
       run: |
         ls
     -
-      name: Prepare latest version with own customization
+      name: Build
       run: |
         bash av_custom.bash
         cd custom-av
-    -
-      name: Build
-      run: |
         # docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         # docker buildx create --use --driver docker-container
         # docker buildx create --use --driver docker-container --name multiarch
