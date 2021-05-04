@@ -12,16 +12,35 @@ jobs:
     steps:
     - name: Checkout current repo
       uses: actions/checkout@v2
-    - name: verbose
+    - name: Buildx help
       run: |
         docker -v
         export DOCKER_CLI_EXPERIMENTAL=enabled
         docker buildx create --help
-    - name: Set up Docker Buildx
+    -
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    -
+      name: Set up Docker Buildx
       id: buildx
-      uses: crazy-max/ghaction-docker-buildx@v1
-      with:
-        version: latest
+      uses: docker/setup-buildx-action@v1
+    -
+      name: Inspect builder
+      run: |
+        echo "Name:      ${{ steps.buildx.outputs.name }}"
+        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+        echo "Status:    ${{ steps.buildx.outputs.status }}"
+        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+    -
+      name: inspect
+      run: |
+        docker buildx inspect --bootstrap
+    #- name: Set up Docker Buildx
+    #  id: buildx
+    #  uses: crazy-max/ghaction-docker-buildx@v1
+    #  with:
+    #    version: latest
     - name: Available platforms
       run: echo ${{ steps.buildx.outputs.platforms }}
     - name: Docker login
@@ -45,25 +64,6 @@ jobs:
     - name: ls
       run: |
         ls
-    -
-      name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
-    -
-      name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v1
-    -
-      name: Inspect builder
-      run: |
-        echo "Name:      ${{ steps.buildx.outputs.name }}"
-        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
-        echo "Status:    ${{ steps.buildx.outputs.status }}"
-        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
-        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-    -
-      name: inspect
-      run: |
-        docker buildx inspect --bootstrap
     -
       name: Prepare latest version with own customization
       run: |
