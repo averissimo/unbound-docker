@@ -55,13 +55,10 @@ jobs:
         git config --local user.name "GitHub Action"
     - name: Pull changes from MatthewVance/unbound-docker
       run: |
-        echo $(pwd)
-        ls -ln
         git pull
-        git status
         git remote add mvance https://github.com/MatthewVance/unbound-docker
         git fetch --all
-        git merge mvance/master
+        git merge mvance/master --ff
     - name: Push changes
       uses: ad-m/github-push-action@fe38f0a751bf9149f0270cc1fe20bf9156854365
       with:
@@ -77,7 +74,7 @@ jobs:
         bash av_custom.bash
         cd custom-av
 
-        cat ./Dockerfile
+        # cat ./Dockerfile
         # docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         # docker buildx create --use --driver docker-container
         # docker buildx create --use --driver docker-container --name multiarch
