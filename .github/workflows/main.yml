@@ -12,6 +12,9 @@ jobs:
     steps:
     - name: Checkout current repo
       uses: actions/checkout@v2
+      with:
+        ref: master
+        fetch-depth: 0
     - name: Buildx help
       run: |
         docker -v
