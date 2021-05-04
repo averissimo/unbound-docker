@@ -54,6 +54,7 @@ jobs:
       run: |
         echo $(pwd)
         ls -ln
+        git pull
         git status
         git remote add mvance https://github.com/MatthewVance/unbound-docker
         git fetch --all
