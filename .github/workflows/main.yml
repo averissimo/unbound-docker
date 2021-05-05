@@ -10,46 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     name: Build/Push Docker
     steps:
+    - name: Set Environment Variables
+      run: |
+        echo "PLATFORM=linux/amd64,linux/arm64,linux/arm/v7" >> $GITHUB_ENV
+        echo "DOCKERHUB_SLUG=$(echo ${{ secrets.HUB_USER }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
     - name: Checkout current repo
       uses: actions/checkout@v2
       with:
         ref: master
-        fetch-depth: 0
-    - name: Buildx help
-      run: |
-        docker -v
-        export DOCKER_CLI_EXPERIMENTAL=enabled
-        docker buildx create --help
-    -
-      name: Set up QEMU
+    - name: Login to Dockerhub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_PASS }}
+    - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
-    -
-      name: Set up Docker Buildx
+    - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@v1
-    -
-      name: Inspect builder
-      run: |
-        echo "Name:      ${{ steps.buildx.outputs.name }}"
-        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
-        echo "Status:    ${{ steps.buildx.outputs.status }}"
-        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
-        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-    -
-      name: inspect
-      run: |
-        docker buildx inspect --bootstrap
-    #- name: Set up Docker Buildx
-    #  id: buildx
-    #  uses: crazy-max/ghaction-docker-buildx@v1
-    #  with:
-    #    version: latest
-    - name: Available platforms
-      run: echo ${{ steps.buildx.outputs.platforms }}
-    - name: Docker login
-      run: |
-        echo "${{ secrets.HUB_PASS }}" | docker login --username "${{ secrets.HUB_USER }}" --password-stdin
-    - name: Set credentials
+    - name: Set credentials for github
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -65,22 +44,17 @@ jobs:
         directory: ./
         repository:  averissimo/unbound-docker
         github_token: ${{ secrets.GH_TOKEN }}
-    - name: ls
-      run: |
-        ls
-    -
-      name: Build
+    - name: Custom changes
       run: |
         bash av_custom.bash
-        cd custom-av
-
-        # cat ./Dockerfile
-        # docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-        # docker buildx create --use --driver docker-container
-        # docker buildx create --use --driver docker-container --name multiarch
-
-        docker buildx build \
-          --platform  linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 \
-          --output "type=image,push=true" \
-          --tag betashil/unbound:latest \
-          --file Dockerfile .
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./custom-av
+        platforms: ${{ env.PLATFORM }}
+        build-args: |
+          GRAFANA_VERSION=master
+          GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
+        push: true
+        tags: |
+            ${{ env.DOCKERHUB_SLUG }}/unbound:latest
