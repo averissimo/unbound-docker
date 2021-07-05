@@ -17,8 +17,7 @@ RUN set -e -x && \
     curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
     export GNUPGHOME && \
-    ( gpg --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$OPGP_OPENSSL" \
-    || gpg --no-tty --keyserver ha.pool.sks-keyservers.net --recv-keys "$OPGP_OPENSSL" ) && \
+    gpg --no-tty --keyserver keys.openpgp.org --recv-keys "$OPGP_OPENSSL" && \
     gpg --batch --verify openssl.tar.gz.asc openssl.tar.gz && \
     tar xzf openssl.tar.gz && \
     cd $VERSION_OPENSSL && \
@@ -128,10 +127,7 @@ RUN set -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-COPY a-records.conf /opt/unbound/etc/unbound/
-COPY forward-records.conf /opt/unbound/etc/unbound/
-COPY srv-records.conf /opt/unbound/etc/unbound/
-COPY unbound.sh /
+COPY data/ /
 
 RUN chmod +x /unbound.sh
 
@@ -142,6 +138,6 @@ ENV PATH /opt/unbound/sbin:"$PATH"
 EXPOSE 53/tcp
 EXPOSE 53/udp
 
-HEALTHCHECK --interval=5s --timeout=3s --start-period=5s CMD drill @127.0.0.1 cloudflare.com || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 CMD drill @127.0.0.1 cloudflare.com || exit 1
 
 CMD ["/unbound.sh"]
